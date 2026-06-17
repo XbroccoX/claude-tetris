@@ -20,41 +20,30 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Analizar y diagnosticar con Claude
+      - name: Proponer diagnóstico con Claude
         uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
-          claude_args: "--allowedTools Bash(gh issue *),Bash(gh label *)"
+          claude_args: "--allowedTools Bash(gh issue *)"
           prompt: |
-            Eres un asistente técnico que analiza issues de GitHub para un proyecto de Tetris en JavaScript vanilla (sin dependencias, sin build step).
-            El repositorio tiene tres archivos: index.html, style.css y game.js.
+            Eres un asistente técnico para un proyecto de Tetris en JavaScript vanilla (index.html, style.css, game.js, sin dependencias).
 
-            Se acaba de ${{ github.event.action == 'opened' && 'abrir' || 'editar' }} el siguiente issue:
+            Se acaba de abrir o editar el siguiente issue:
             - Número: #${{ github.event.issue.number }}
             - Título: ${{ github.event.issue.title }}
             - Cuerpo: ${{ github.event.issue.body }}
             - Autor: ${{ github.event.issue.user.login }}
 
-            Tus tareas:
+            Tu única tarea es publicar un comentario con la propuesta de diagnóstico.
+            NO apliques ningún label. NO hagas ninguna otra acción.
 
-            1. **Asigna entre 1 y 3 labels** según el contenido del issue. Usa únicamente estos:
-               - `bug` — algo falla o se comporta incorrectamente
-               - `enhancement` — nueva funcionalidad o mejora
-               - `performance` — problema de rendimiento
-               - `gameplay` — mecánicas de juego
-               - `ui/ux` — interfaz visual o experiencia
-               - `question` — pregunta o consulta
-               - `documentation` — documentación
-               - `good first issue` — tarea simple para nuevos contribuidores
+            El comentario debe estar en GitHub Flavored Markdown y seguir este formato exacto:
 
-            2. **Publica un comentario** en el issue con el siguiente formato en GitHub Flavored Markdown:
-
-            ---
-            ## Diagnóstico automático — Claude
+            ## 🔍 Propuesta de diagnóstico — Claude
 
             **Tipo:** [Bug / Mejora / Pregunta / Documentación / Rendimiento]
             **Severidad:** [Baja / Media / Alta]
-            **Labels asignados:** label1, label2
+            **Labels sugeridos:** `label1`, `label2`
 
             ### Diagnóstico
             [3 a 5 oraciones explicando qué falla o se solicita, su impacto en el juego y las posibles causas en el código.]
@@ -63,13 +52,7 @@ jobs:
             [2 a 3 oraciones describiendo cómo abordar la solución, mencionando las funciones o secciones de game.js relevantes si aplica.]
 
             ---
-            _Generado automáticamente por Claude._
+            _Responde `/aplicar` para confirmar y aplicar los labels sugeridos._
 
-            ---
-
-            Comandos a usar:
-              gh label create "LABEL" --color "COLOR" --description "DESC" --repo ${{ github.repository }} 2>/dev/null || true
-              gh issue edit ${{ github.event.issue.number }} --add-label "label1,label2" --repo ${{ github.repository }}
-              gh issue comment ${{ github.event.issue.number }} --body "..." --repo ${{ github.repository }}
-
-            Sé conciso, técnico y útil. No leas ni modifiques archivos del repositorio.
+            Comando a usar:
+            gh issue comment ${{ github.event.issue.number }} --body "..." --repo ${{ github.repository }}
