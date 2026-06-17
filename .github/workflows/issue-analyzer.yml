@@ -57,6 +57,10 @@ jobs:
             Si no existe ninguno, crea uno nuevo:
               gh issue comment create --body "CONTENIDO" ${{ github.event.issue.number }} --repo ${{ github.repository }}
 
+            El comentario debe estar escrito en GitHub Flavored Markdown (GFM) para que GitHub lo renderice correctamente.
+            Usa encabezados con `##` y `###`, negritas con `**texto**`, listas con `-`, y bloques de código con triple backtick cuando corresponda.
+            No uses HTML crudo ni formatos propietarios. El contenido debe verse bien en la interfaz web de GitHub.
+
             El comentario debe tener exactamente este formato:
             ---
             ## Diagnostico automatico — Claude
