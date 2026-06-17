@@ -1,0 +1,78 @@
+name: Analizar Issue con Claude
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
+
+jobs:
+  analyze-issue:
+    if: github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Analizar y diagnosticar con Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Eres un asistente técnico que analiza issues de GitHub para un proyecto de Tetris en JavaScript vanilla (sin dependencias, sin build step).
+            El repositorio tiene tres archivos: index.html, style.css y game.js.
+
+            Tu tarea es analizar el issue #${{ github.event.issue.number }} del repositorio ${{ github.repository }}.
+            Sigue estos pasos en orden:
+
+            PASO 1 — Lee el issue completo:
+            gh issue view ${{ github.event.issue.number }} --repo ${{ github.repository }}
+
+            PASO 2 — Crea los labels del proyecto si no existen aun (ignora errores de duplicado):
+            gh label create "bug"             --color "d73a4a" --description "Algo no funciona correctamente"   --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "enhancement"     --color "a2eeef" --description "Nueva funcionalidad o mejora"     --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "performance"     --color "fbca04" --description "Problema de rendimiento"          --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "gameplay"        --color "0075ca" --description "Mecanicas de juego"               --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "ui/ux"           --color "e4e669" --description "Interfaz visual o experiencia"    --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "question"        --color "d876e3" --description "Pregunta o consulta"              --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "documentation"   --color "0052cc" --description "Documentacion"                    --repo ${{ github.repository }} 2>/dev/null || true
+            gh label create "good first issue" --color "7057ff" --description "Buena para nuevos contribuidores" --repo ${{ github.repository }} 2>/dev/null || true
+
+            PASO 3 — Asigna entre 1 y 3 labels que mejor describan el issue.
+            Usa solo los nombres exactos de la lista anterior.
+            gh issue edit ${{ github.event.issue.number }} --add-label "LABEL1,LABEL2" --repo ${{ github.repository }}
+
+            PASO 4 — Revisa si ya existe un comentario de diagnostico previo para no duplicar:
+            gh issue comment list ${{ github.event.issue.number }} --repo ${{ github.repository }} --json id,body
+
+            PASO 5 — Publica el diagnostico en español.
+            Si ya existe un comentario que comience con "## Diagnostico automatico", actualiza ese comentario con su ID:
+              gh issue comment edit ID --body "NUEVO_CONTENIDO" --repo ${{ github.repository }}
+            Si no existe ninguno, crea uno nuevo:
+              gh issue comment create --body "CONTENIDO" ${{ github.event.issue.number }} --repo ${{ github.repository }}
+
+            El comentario debe tener exactamente este formato:
+            ---
+            ## Diagnostico automatico — Claude
+
+            **Tipo:** [Bug / Mejora / Pregunta / Documentacion / Rendimiento]
+            **Severidad:** [Baja / Media / Alta]
+            **Labels asignados:** label1, label2
+
+            ### Diagnostico
+            [3 a 5 oraciones. Explica que esta fallando o que se solicita, cual es su impacto en el juego y cuales son las posibles causas en el codigo.]
+
+            ### Enfoque sugerido
+            [2 a 3 oraciones describiendo como abordar la solucion a alto nivel, mencionando las funciones o secciones de game.js relevantes si aplica.]
+
+            ---
+            _Generado automaticamente por Claude._
+            ---
+
+            IMPORTANTE: No leas ni modifiques ningun archivo del repositorio. Usa solo comandos gh.
