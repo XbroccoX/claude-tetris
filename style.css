@@ -162,3 +162,135 @@ kbd {
 #restart-btn:hover {
   background: #9bbdff;
 }
+
+/* ---- Leaderboard ---- */
+.hs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #c0c0d0;
+}
+
+.hs-table th {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #555570;
+  padding: 2px 3px;
+  text-align: left;
+  border-bottom: 1px solid #2a2a3a;
+}
+
+.hs-table td {
+  padding: 3px 3px;
+  vertical-align: middle;
+  border-bottom: 1px solid #1e1e2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60px;
+}
+
+.hs-table td:first-child {
+  color: #555570;
+  width: 14px;
+}
+
+.hs-table td:nth-child(2) {
+  max-width: 50px;
+}
+
+.hs-table tr.hs-highlight td {
+  color: #7aa2f7;
+  background: rgba(122, 162, 247, 0.08);
+}
+
+.hs-empty {
+  font-size: 10px;
+  color: #555570;
+  text-align: center;
+  padding: 6px 0;
+}
+
+/* Overlay leaderboard — slightly larger */
+#overlay-leaderboard .hs-table {
+  font-size: 12px;
+  min-width: 220px;
+}
+
+#overlay-leaderboard .hs-empty {
+  font-size: 12px;
+}
+
+/* Name input in overlay */
+#name-input {
+  background: #1a1a25;
+  border: 1px solid #3a3a5a;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 14px;
+  padding: 8px 12px;
+  width: 180px;
+  text-align: center;
+  outline: none;
+}
+
+#name-input:focus {
+  border-color: #7aa2f7;
+}
+
+#save-btn {
+  background: #81c784;
+  color: #0f0f17;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s;
+}
+
+#save-btn:hover {
+  background: #a5d6a7;
+}
+
+/* Clear records button */
+.btn-clear-hs {
+  background: transparent;
+  border: 1px solid #2a2a3a;
+  border-radius: 4px;
+  color: #444460;
+  font-size: 10px;
+  padding: 4px 8px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: color 0.15s, border-color 0.15s;
+  margin-top: 4px;
+  align-self: flex-start;
+}
+
+.btn-clear-hs:hover {
+  color: #e57373;
+  border-color: #e57373;
+}
+
+/* ---- Selector de tema (skin) ---- */
+#skin-select {
+  background: #22223a;
+  border: 1px solid #3a3a5a;
+  border-radius: 4px;
+  color: #c0c0d0;
+  font-size: 12px;
+  padding: 4px 6px;
+  cursor: pointer;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+
+#skin-select:focus,
+#skin-select:hover {
+  border-color: #7aa2f7;
+}
