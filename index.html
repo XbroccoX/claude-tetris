@@ -38,7 +38,7 @@
             <li><kbd>↑</kbd> rotar</li>
             <li><kbd>↓</kbd> bajar</li>
             <li><kbd>Space</kbd> caída</li>
-            <li><kbd>P</kbd> pausa</li>
+            <li><kbd>P</kbd><kbd>Esc</kbd> pausa</li>
           </ul>
         </div>
       </aside>
@@ -49,6 +49,49 @@
         <p id="overlay-title">GAME OVER</p>
         <p id="overlay-score"></p>
         <button id="restart-btn">Reiniciar</button>
+      </div>
+    </div>
+
+    <div id="pause-overlay" class="overlay hidden">
+      <div class="overlay-box pause-box">
+        <p class="pause-title">PAUSA</p>
+
+        <div class="pause-controls-list">
+          <span class="pause-controls-header">CONTROLES</span>
+          <ul>
+            <li><kbd>←</kbd><kbd>→</kbd> mover</li>
+            <li><kbd>↑</kbd><kbd>X</kbd> rotar</li>
+            <li><kbd>↓</kbd> bajar</li>
+            <li><kbd>Space</kbd> caída rápida</li>
+            <li><kbd>P</kbd><kbd>Esc</kbd> pausa</li>
+          </ul>
+        </div>
+
+        <div class="pause-level-selector">
+          <label for="start-level-select">Nivel inicial (próxima partida)</label>
+          <select id="start-level-select">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+          </select>
+        </div>
+
+        <div class="pause-buttons">
+          <button id="resume-btn">Reanudar</button>
+          <button id="pause-restart-btn">Reiniciar</button>
+        </div>
       </div>
     </div>
   </div>
